@@ -133,3 +133,41 @@ const AboutPage = () => {
 export default AboutPage
 ```
 
+이제는 모든 페이지에서 공통으로 보이는 header과 footer를 만들어 보려고 한다.
+
+`src/components`폴더를 만들어주고 거기에 `footer.js`를 생성한다.
+
+```react
+import React from "react"
+
+const Footer = () => {
+  return (
+    <footer>
+      <p>Created by JSnow, © 2019</p>
+    </footer>
+  )
+}
+
+export default Footer
+```
+
+아까 이미 완성한 Contact페이지에 만들어진 Footer를 한 번 import 해본다.
+
+```react
+import React from "react"
+import Footer from "../components/footer"
+
+const ContactPage = () => {
+  return (
+    <div>
+      <h1>Contact</h1>
+      <p>
+        Contact me with <a href="mailto:asdka4618@gmail.com"></a>!
+      </p>
+      <Footer />
+    </div>
+  )
+}
+
+export default ContactPage
+```
