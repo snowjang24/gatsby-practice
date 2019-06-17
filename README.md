@@ -75,3 +75,35 @@ const BlogPage = () => {
 
 export default BlogPage
 ```
+
+이제 블로그 페이지 외에도 `contact.js`와 `about.js`페이지를 만들어 준다.
+
+```react
+// about.js
+import React from "react"
+
+const AboutPage = () => {
+  return (
+    <div>
+      <h1>About me</h1>
+      <p>I'm just student who love front-end and design</p>
+    </div>
+  )
+}
+
+export default AboutPage
+
+// contact.js
+import React from "react"
+
+const ContactPage = () => {
+  return (
+    <div>
+      <h1>Contact</h1>
+      <p>Contact me !</p>
+    </div>
+  )
+}
+
+export default ContactPage
+```
