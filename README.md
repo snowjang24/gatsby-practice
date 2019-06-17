@@ -110,15 +110,16 @@ export default ContactPage
 
 gatsby에서 링크는 일반적인 우리가아는 앵커(`<a>`)를 이용하는 것 보다 `gatsby`모듈에 있는 `Link` 메서드를 이용한다. 이를 이용하면 최적화가 자동으로 이루어진다. 화면 전환시 반짝거리는 로드가 없어진다. 
 아래의 두 태그를 직접 눌러보면 `Link`메서드가 더 빠른 것을 알 수 있다.
+
 ```react
 import React from "react"
 import { Link } from "gatsby"
 
-const IndexPage = () => {
+const AboutPage = () => {
   return (
     <div>
-      <h1>Hello.</h1>
-      <h2>I'm JSnow! Front-end developer, I'm learning React!</h2>
+      <h1>About me</h1>
+      <p>I'm just student who love front-end and design</p>
       <p>
         Need a developer? <a href="/contact">Contact me.</a>
       </p>
@@ -129,5 +130,6 @@ const IndexPage = () => {
   )
 }
 
-export default IndexPage
+export default AboutPage
 ```
+
