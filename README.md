@@ -40,11 +40,38 @@ Note that the development build is not optimized.
 To create a production build, use npm run build
 ```
 
-`src/pages`에는 앞으로 만들 페이지들을 담으면 된다. 기본적으로 `index.js`가 생성되어 있다.
+`src/pages`에는 앞으로 만들 페이지들을 담으면 된다. 기본적으로 `index.js`가 생성되어 있다. 다음과 같이 수정하고 저장하면 화면에 원하는 문구가 출력된다.
 
 ```react
 import React from "react"
 
-export default () => <div>Gatsby를 배워보자!</div>
+const IndexPage = () => {
+  return (
+    <div>
+      <h1>Hello.</h1>
+      <h2>I'm JSnow! Front-end developer, I'm learning React!</h2>
+    </div>
+  )
+}
 
+export default IndexPage
+```
+
+여기서 `index.js`는 우리가 흔히 보는 `index.html`과 동일한 역할을 한다.
+
+`src/pages`에 `blog.js`를 생성한다. 저장후 `localhost:8000/blog`으로 접속하면 우리가 출력하고자 했던 문구를 볼 수 있다.
+
+```react
+import React from "react"
+
+const BlogPage = () => {
+  return (
+    <div>
+      <h1>Blog</h1>
+      <p>Posts will show up here later on</p>
+    </div>
+  )
+}
+
+export default BlogPage
 ```
