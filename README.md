@@ -226,3 +226,48 @@ const IndexPage = () => {
 
 export default IndexPage
 ```
+
+이렇게 `Header`과 `Footer`를 적용하고보니 모든 페이지에서도 `Header`와 `Footer`를 보이게 하고 싶다. 
+이를 위해서 `src/components`에 `layout.js`를 만든다.
+`IndexPage`에 있던 `Header`와 `Footer`를 옮길 것이기 때문에 지워주고 `Layout`만 `import`하고 나머지는 지워준다. 그리고 `Layout`으로 원래 있던 문구를 인자로 전달한다.
+
+```react
+import React from "react"
+
+import Layout from "../components/layout"
+
+const IndexPage = () => {
+  return (
+    <div>
+      <Layout>
+        <h1>Hello.</h1>
+        <h2>I'm JSnow! Front-end developer, I'm learning React!</h2>
+      </Layout>
+    </div>
+  )
+}
+
+export default IndexPage
+```
+
+이제 `Layout`을 만든다. 아까 넘겨받은 인자를 `props.children`으로 뿌려준다. 아까 다른 페이지에 넣은 중복된 코드들을 제거해주고 모든 페이지에 `Layout` 을 추가하고 내용들을 모두 인자로 넘겨준다.
+
+```react
+import React from "react"
+
+import Header from "../components/header"
+import Footer from "../components/footer"
+
+const Layout = props => {
+  return (
+    <div>
+      <Header />
+      {props.children}
+      <Footer />
+    </div>
+  )
+}
+
+export default Layout
+
+```

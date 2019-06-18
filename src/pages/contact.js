@@ -1,15 +1,14 @@
 import React from "react"
-import Footer from "../components/footer"
+import Layout from "../components/layout"
 
 const ContactPage = () => {
   return (
-    <div>
+    <Layout>
       <h1>Contact</h1>
       <p>
         Contact me with <a href="mailto:asdka4618@gmail.com"></a>!
       </p>
-      <Footer />
-    </div>
+    </Layout>
   )
 }
 
