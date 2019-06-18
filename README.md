@@ -42,7 +42,7 @@ To create a production build, use npm run build
 
 `src/pages`에는 앞으로 만들 페이지들을 담으면 된다. 기본적으로 `index.js`가 생성되어 있다. 다음과 같이 수정하고 저장하면 화면에 원하는 문구가 출력된다.
 
-```react
+```javascript
 import React from "react"
 
 const IndexPage = () => {
@@ -61,7 +61,7 @@ export default IndexPage
 
 `src/pages`에 `blog.js`를 생성한다. 저장후 `localhost:8000/blog`으로 접속하면 우리가 출력하고자 했던 문구를 볼 수 있다.
 
-```react
+```javascript
 import React from "react"
 
 const BlogPage = () => {
@@ -78,7 +78,7 @@ export default BlogPage
 
 이제 블로그 페이지 외에도 `contact.js`와 `about.js`페이지를 만들어 준다.
 
-```react
+```javascript
 // about.js
 import React from "react"
 
@@ -111,7 +111,7 @@ export default ContactPage
 gatsby에서 링크는 일반적인 우리가아는 앵커(`<a>`)를 이용하는 것 보다 `gatsby`모듈에 있는 `Link` 컴포넌트 이용한다. 이를 이용하면 최적화가 자동으로 이루어진다. 화면 전환시 반짝거리는 로드가 없어진다. 
 아래의 두 태그를 직접 눌러보면 `Link`컴포넌트가 더 빠른 것을 알 수 있다.
 
-```react
+```javascript
 import React from "react"
 import { Link } from "gatsby"
 
@@ -137,7 +137,7 @@ export default AboutPage
 
 `src/components`폴더를 만들어주고 거기에 `footer.js`를 생성한다.
 
-```react
+```javascript
 import React from "react"
 
 const Footer = () => {
@@ -153,7 +153,7 @@ export default Footer
 
 아까 이미 완성한 Contact페이지에 만들어진 Footer를 한 번 import 해본다.
 
-```react
+```javascript
 import React from "react"
 import Footer from "../components/footer"
 
@@ -174,7 +174,7 @@ export default ContactPage
 
 이번에는 Header를 만들어주는데 역시나 `Link`컴포넌트를 사용한다.
 
-```react
+```javascript
 import React from "react"
 import { Link } from "gatsby"
 
@@ -207,7 +207,7 @@ export default Header
 
 `IndexPage`에 `Header`와 `Footer`를 넣어준다.
 
-```react
+```javascript
 import React from "react"
 
 import Header from "../components/header"
@@ -231,7 +231,7 @@ export default IndexPage
 이를 위해서 `src/components`에 `layout.js`를 만든다.
 `IndexPage`에 있던 `Header`와 `Footer`를 옮길 것이기 때문에 지워주고 `Layout`만 `import`하고 나머지는 지워준다. 그리고 `Layout`으로 원래 있던 문구를 인자로 전달한다.
 
-```react
+```javascript
 import React from "react"
 
 import Layout from "../components/layout"
@@ -252,7 +252,7 @@ export default IndexPage
 
 이제 `Layout`을 만든다. 아까 넘겨받은 인자를 `props.children`으로 뿌려준다. 아까 다른 페이지에 넣은 중복된 코드들을 제거해주고 모든 페이지에 `Layout` 을 추가하고 내용들을 모두 인자로 넘겨준다.
 
-```react
+```javascript
 import React from "react"
 
 import Header from "../components/header"
