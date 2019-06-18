@@ -307,3 +307,8 @@ module.exports = {
 ```javascript
 import "../styles/index.scss"
 ```
+
+기본적인 스타일을 적용하기 위해 gatsby에서 제공하는 [기본 블로그 스타일](http://links.mead.io/gatsbystyles)을 가져온다. `index.scss`에 붙여넣기 하여 스타일을 적용한다.
+
+![image-20190618204242221](README/image-20190618204242221-0858162.png)
+
