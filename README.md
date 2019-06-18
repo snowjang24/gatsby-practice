@@ -269,5 +269,41 @@ const Layout = props => {
 }
 
 export default Layout
+```
 
+이제 어느정도 블로그의 틀은 잡았다. 하지만 아직 디자인으로 아무것도 없기 때문에 예쁘지 않다. 꾸며주기 위해 `src/styles`를 만들고 `index.css`파일도 만든다. 테스트를 위해 모든 글자를 빨간색으로 만들어본다.
+
+```css
+*{
+  color: red;
+}
+```
+
+`Layout`에 한 줄만 추가하면 쉽게 style을 적용할 수 있다.
+
+```javascript
+import "../styles/index.css"
+```
+
+하지만 그냥 CSS를 쓰는 것보다 좀 더 편하고 유용한 SASS를 쓰는 것이 더 좋을 것 같기 때문에 gatsby의 plugin을 한 번 써보려고 한다. gatsby는 gatsby만의 유용한 plugin들을 제공하고 있다.
+플러그인은 Gatsby에서 [plugins](https://www.gatsbyjs.org/plugins/) 검색해서 설치 방법을 확인 할 수 있다. sass를 검색하고 설명에 따라 플러그인을 설치한다.
+
+![image-20190618202347406](README/image-20190618202347406-0857027.png)
+
+플러그인을 설치하고, 루트 디렉토리에 `gatsby-config.js`에 문서를 따라 세팅해준다.
+```bash
+npm install --save node-sass gatsby-plugin-sass
+```
+
+```javascript
+module.exports = {
+  // in gatsby-config.js
+  plugins: [`gatsby-plugin-sass`],
+}
+```
+
+그리고 `index.css`의 확장자를 `scss`로 바꿔주고 `Layout`에 있던 `import`역시 바꿔준다.
+
+```javascript
+import "../styles/index.scss"
 ```
