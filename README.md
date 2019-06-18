@@ -108,8 +108,8 @@ const ContactPage = () => {
 export default ContactPage
 ```
 
-gatsby에서 링크는 일반적인 우리가아는 앵커(`<a>`)를 이용하는 것 보다 `gatsby`모듈에 있는 `Link` 메서드를 이용한다. 이를 이용하면 최적화가 자동으로 이루어진다. 화면 전환시 반짝거리는 로드가 없어진다. 
-아래의 두 태그를 직접 눌러보면 `Link`메서드가 더 빠른 것을 알 수 있다.
+gatsby에서 링크는 일반적인 우리가아는 앵커(`<a>`)를 이용하는 것 보다 `gatsby`모듈에 있는 `Link` 컴포넌트 이용한다. 이를 이용하면 최적화가 자동으로 이루어진다. 화면 전환시 반짝거리는 로드가 없어진다. 
+아래의 두 태그를 직접 눌러보면 `Link`컴포넌트가 더 빠른 것을 알 수 있다.
 
 ```react
 import React from "react"
@@ -170,4 +170,59 @@ const ContactPage = () => {
 }
 
 export default ContactPage
+```
+
+이번에는 Header를 만들어주는데 역시나 `Link`컴포넌트를 사용한다.
+
+```react
+import React from "react"
+import { Link } from "gatsby"
+
+const Header = () => {
+  return (
+    <header>
+      <h1>JSnow</h1>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/blog">Blog</Link>
+          </li>
+          <li>
+            <Link to="/about">About</Link>
+          </li>
+          <li>
+            <Link to="/contact">Contact</Link>
+          </li>
+        </ul>
+      </nav>
+    </header>
+  )
+}
+
+export default Header
+```
+
+`IndexPage`에 `Header`와 `Footer`를 넣어준다.
+
+```react
+import React from "react"
+
+import Header from "../components/header"
+import Footer from "../components/footer"
+
+const IndexPage = () => {
+  return (
+    <div>
+      <Header />
+      <h1>Hello.</h1>
+      <h2>I'm JSnow! Front-end developer, I'm learning React!</h2>
+      <Footer />
+    </div>
+  )
+}
+
+export default IndexPage
 ```
