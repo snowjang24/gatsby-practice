@@ -640,3 +640,81 @@ const Footer = () => {
 
 export default Footer
 ```
+
+참고로 두 개를 가져오고 싶으면 다음과 같이 작성하면 둘 다 가져올 수 있다.
+
+![image-20190619214624243](README/image-20190619214624243-0948384.png)
+
+이렇게 graphiql도 유용하지만 좀 더 유용한 도구를 사용해보려 한다. [graphql playground](https://github.com/prisma/graphql-playground)는 GraphiQL의 구성 요소를 사용하지만, 더 나은 (로컬) 개발 워크 플로우를 가능하게 한다. GraphQL을 위한 IDE다. 더 많은 기능을 담고 있다.
+
+먼저 이를 위해서 루트 폴더에 `.env.development`라는 환경 파일을 만든다. 그리고 다음과 같이 작성하면 된다.
+
+```
+GATSBY_GRAPHQL_IDE=playground
+```
+
+그리고 가동중이던 서버를 끄고 필요한 라이브러리를 하나 받아준다.
+
+```bash
+npm install --save-dev env-cmd
+```
+
+그리고 이를 이용하기 위해 `package.json`에 `develop` 부분을 다음과 같이 수정한다.
+
+```json
+{
+  "name": "gatsby-starter-hello-world",
+  "private": true,
+  "description": "A simplified bare-bones starter for Gatsby",
+  "version": "0.1.0",
+  "license": "MIT",
+  "scripts": {
+    "build": "gatsby build",
+    "develop": "env-cmd .env.development gatsby develop",
+    "format": "prettier --write src/**/*.{js,jsx}",
+    "start": "npm run develop",
+    "serve": "gatsby serve",
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\""
+  },
+  "dependencies": {
+```
+
+이제 세팅을 다 끝내고 `npm run develop`으로 서버를 키면 다음과 같은 에러를 만나게 된다.
+```bash
+> npm run develop
+
+> gatsby-starter-hello-world@0.1.0 develop /Users/soonho/project/gatsby-practice
+> env-cmd .env.development gatsby develop
+
+Error: Unable to locate env file at default location (./.env)
+    at /Users/soonho/project/gatsby-practice/node_modules/env-cmd/dist/get-env-vars.js:44:19
+    at Generator.throw (<anonymous>)
+    at rejected (/Users/soonho/project/gatsby-practice/node_modules/env-cmd/dist/get-env-vars.js:5:65)
+    at processTicksAndRejections (internal/process/task_queues.js:89:5)
+npm ERR! code ELIFECYCLE
+npm ERR! errno 1
+npm ERR! gatsby-starter-hello-world@0.1.0 develop: `env-cmd .env.development gatsby develop`
+npm ERR! Exit status 1
+npm ERR! 
+npm ERR! Failed at the gatsby-starter-hello-world@0.1.0 develop script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /Users/soonho/.npm/_logs/2019-06-19T13_22_21_553Z-debug.log
+```
+
+[Using the GraphQL Playground](https://www.gatsbyjs.org/docs/using-graphql-playground/)를 참고하면 좋을 것 같다. 
+
+다음과 같이 `-f`를 가운데에 추가하여 저장하고 다시 `npm run develop`를 실행한다.
+
+```json
+"develop": "env-cmd -f .env.development gatsby develop"
+```
+
+[http://localhost:8000/___graphql](http://localhost:8000/___graphql)로 접속하면 아까와는 다른 화면이 나온다. 바로 GraphQL playground다. 아까의 GraphiQL과 동일하게 작동하며 기능이 좀 더 많다.
+
+![image-20190619224217355](README/image-20190619224217355-0951737.png)
+
+탭 기능도 있어서 여러개 만들 수 있고 DOCS기능도 expand형식으로 되어있어 더 보기 쉽다.
+
+![image-20190619224322304](README/image-20190619224322304-0951802.png)
