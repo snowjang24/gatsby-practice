@@ -614,3 +614,29 @@ graphql을 제대로 이용하기 위해서는 `graphql`과 `useStaticQuery` 모
 그리고 `data` 변수에 useStaticQuery()메서드와 graphql메서드를 이용하는데 이용 방식이 좀 특이하다 앞에서 썼던 쿼리를 template string의 형식인 Backtick 사이에 넣어서 이용한다. 결과가 올바르게 반영 되었다.
 
 ![image-20190619212934835](README/image-20190619212934835-0947374.png)
+
+동일한 방법으로 한 번 `Footer`에 author이름을 적용해보면 다음과 같다.
+
+```javascript
+import React from "react"
+import { graphql, useStaticQuery } from "gatsby"
+
+const Footer = () => {
+  const data = useStaticQuery(graphql`
+    query {
+      site {
+        siteMetadata {
+          author
+        }
+      }
+    }
+  `)
+  return (
+    <footer>
+      <p>Created by {data.site.siteMetadata.author}, © 2019</p>
+    </footer>
+  )
+}
+
+export default Footer
+```
