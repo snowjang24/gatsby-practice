@@ -312,3 +312,225 @@ import "../styles/index.scss"
 
 ![image-20190618204242221](README/image-20190618204242221-0858162.png)
 
+일반적인 방법으로 `class`이름을 주고 스타일을 적용할 경우 이름이 같아 꼬이는 경우가 발생할 수 있다. 그렇기 때문에 CSS Module을 사용하여 적용한다.
+방법은 간단하다. `header.scss`였으면 이름에 module을 붙여주면 된다. `header.module.scss`
+
+링크의 색을 바꿔주는 예시로 한 번 변하는지 보려 한다. 만들어진 `header.module.scss`에 다음과 같이 스타일을 작성하고 저장한다.
+
+```css
+.link {
+  color: #999;
+}
+```
+
+`Header`부분에 첫 번째 링크에 스타일 적용을 위해 다음과 같이 수정한다.
+
+```javascript
+import React from "react"
+import { Link } from "gatsby"
+
+import headerStyles from "./header.module.scss"
+
+const Header = () => {
+  return (
+    <header>
+      <h1>JSnow</h1>
+      <nav>
+        <ul>
+          <li>
+            <Link className={headerStyles.link} to="/">
+              Home
+            </Link>
+          </li>
+...
+```
+
+CSS Module이 적용된 `Link`의 클래스 이름을 보면 다음과 같이 식별자가 따로 붙어 있다. 이렇게 생성된 유니크한 클래스 이름을 통해 다른 컴포넌트에서 사용하는 클래스 이름과 중복되는 것을 방지할 수 있다.
+
+![image-20190619155239165](README/image-20190619155239165-0927159.png)
+
+이제 레이아웃에 대한 스타일을 만들어 주기 위해 동일한 폴더에 `layout.module.scss`를 만들어주고 동일하게 import한다.
+
+```scss
+.container {
+  margin: 0 auto;
+  max-width: 750px;
+  padding: 1rem;
+}
+```
+
+```javascript
+import React from "react"
+
+import Header from "../components/header"
+import Footer from "../components/footer"
+import "../styles/index.scss"
+import layoutStyles from "./layout.module.scss"
+
+const Layout = props => {
+  return (
+    <div className={layoutStyles.container}>
+      <Header />
+      {props.children}
+      <Footer />
+    </div>
+  )
+}
+
+export default Layout
+
+```
+
+Sticky Footer를 적용하기 위해 `<div>`하나를 생성하고 그 안에 Footer를 제외한 나머지를 넣어준다.
+
+```javascript
+import React from "react"
+
+import Header from "../components/header"
+import Footer from "../components/footer"
+import "../styles/index.scss"
+import layoutStyles from "./layout.module.scss"
+
+const Layout = props => {
+  return (
+    <div className={layoutStyles.container}>
+      <div>
+        <Header />
+        {props.children}
+      </div>
+      <Footer />
+    </div>
+  )
+}
+
+export default Layout
+```
+
+`.content`와 `.container`에 관한 스타일을 추가한 뒤 `.content`를 JSX에 추가한다.
+
+```css
+.container {
+  margin: 0 auto;
+  max-width: 750px;
+  padding: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content {
+  flex-grow: 1;
+}
+```
+
+```javascript
+const Layout = props => {
+  return (
+    <div className={layoutStyles.container}>
+      <div className={layoutStyles.content}>
+        <Header />
+        {props.children}
+      </div>
+      <Footer />
+    </div>
+  )
+}
+```
+
+몇가지 레이아웃 및 헤더에 관한 스타일을 적용한다.
+```css
+.header {
+  padding: 1rem 0 3rem;
+}
+
+.title {
+  color: #000000;
+  font-size: 3rem;
+  text-decoration: none;
+}
+
+.nav-list {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+}
+
+.nav-item {
+  color: #999;
+  font-size: 0.9rem;
+  margin-right: 1.3rem;
+  text-decoration: none;
+}
+
+.nav-item:hover {
+  color: #666666;
+}
+
+.active-nav-item {
+  color: #333333;
+}
+```
+
+```javascript
+import React from "react"
+import { Link } from "gatsby"
+
+import headerStyles from "./header.module.scss"
+
+const Header = () => {
+  return (
+    <header className={headerStyles.header}>
+      <h1>
+        <Link className={headerStyles.title} to="/">
+          JSnow Blog
+        </Link>
+      </h1>
+      <nav>
+        <ul className={headerStyles.navList}>
+          <li>
+            <Link
+              className={headerStyles.navItem}
+              activeClassName={headerStyles.activeNavItem}
+              to="/"
+            >
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link
+              className={headerStyles.navItem}
+              activeClassName={headerStyles.activeNavItem}
+              to="/blog"
+            >
+              Blog
+            </Link>
+          </li>
+          <li>
+            <Link
+              className={headerStyles.navItem}
+              activeClassName={headerStyles.activeNavItem}
+              to="/about"
+            >
+              About
+            </Link>
+          </li>
+          <li>
+            <Link
+              className={headerStyles.navItem}
+              activeClassName={headerStyles.activeNavItem}
+              to="/contact"
+            >
+              Contact
+            </Link>
+          </li>
+        </ul>
+      </nav>
+    </header>
+  )
+}
+
+export default Header
+```
+
+
