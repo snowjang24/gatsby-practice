@@ -718,3 +718,94 @@ npm ERR!     /Users/soonho/.npm/_logs/2019-06-19T13_22_21_553Z-debug.log
 탭 기능도 있어서 여러개 만들 수 있고 DOCS기능도 expand형식으로 되어있어 더 보기 쉽다.
 
 ![image-20190619224322304](README/image-20190619224322304-0951802.png)
+
+이제 본격적으로 포스트를 가져올 수 있는 기능을 넣어보려 한다.
+이를 위해 루트 폴더에 `./src/posts` 폴더를 생성하고 안에 `gatsby.md`와 `react.md`를 만든다.
+
+```markdown
+---
+title: "Gatsby를 사용하는 방법"
+date: "2019-04-04"
+---
+
+Gatsby를 이용하여 블로그를 만들기 위해서는 다음과 같은 사전지식이 필요하다.
+
+## 블로그를 만들기 위해 알아야 할 것들
+
+1. Gatsby & Netlify
+2. React
+3. GraphQL
+```
+
+```markdown
+---
+title: "React를 처음 접했을 때"
+date: "2019-04-02"
+---
+
+React는 정말 좋은 Framework다!
+```
+
+이제 재료는 준비되었으니 도구가 필요하다. 이전과 동일하게 [플러그인 검색 페이지](https://www.gatsbyjs.org/packages/gatsby-source-filesystem/?=source)에서 **source**를 검색한다. Gatsby에는 source를 다루는 다양한 플러그인이 존재한다. 그 중 우리는 **gatsby-source-filesystem**을 이용하려 한다.
+
+![image-20190619230524420](README/image-20190619230524420-0953124.png)
+
+npm을 통해 설치하고 `gatsby-config.js` 파일의 `plugins`부분에 추가로 옵션을 넣어 준다.
+
+```bash
+npm install gatsby-source-filesystem
+```
+
+```javascript
+plugins: [
+    `gatsby-plugin-sass`,
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "src",
+        path: `${__dirname}/src/`,
+      },
+    },
+  ],
+```
+
+이렇게 옵션을 추가하고 서버를 다시 재실행하면 다음과 같이 queries에 추가로 file과 directory관련 query가 추가된 것을 확인할 수 있다.
+
+![image-20190619231751176](README/image-20190619231751176-0953871.png)
+
+그러고나서 playground에서 다음과 같이 query를 작성하면 프로젝트 내의 name, extentison, dir에 관한 정보를 받을 수 있다.
+
+```
+query{
+  allFile{
+    edges{
+      node{
+        name
+        extension
+        dir
+      }
+    }
+  }
+}
+```
+
+![image-20190619232059129](README/image-20190619232059129-0954059.png)
+
+맨 아래로 내려가면 우리가 생성한 post를 확인할 수 있다.
+
+```
+{
+  "node": {
+    "name": "react",
+    "extension": "md",
+    "dir": "/Users/soonho/project/gatsby-practice/src/posts"
+  }
+},
+{
+  "node": {
+    "name": "gatsby",
+    "extension": "md",
+    "dir": "/Users/soonho/project/gatsby-practice/src/posts"
+  }
+}
+```
