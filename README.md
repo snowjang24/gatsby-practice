@@ -533,4 +533,84 @@ const Header = () => {
 export default Header
 ```
 
+이제 드디어 데이터를 다뤄보려고 한다. Gatsby는 Graphql을 이용한다. gatsby에서는 graphql의 깊은 부분까지 다루지 않기 때문에 걱정하지 않아도 된다.
 
+Gatsby는 아래의 그림과 같은 원리로 작동한다.
+
+![image-20190619193858882](README/image-20190619193858882-0940739.png)
+
+앞으로 우리는 `gatby-config`파일을 수정하여 데이터를 전달하게 만드려고 한다.
+
+먼저 graphql로 어떻게 데이터를 주고 받는지 확인하기 위해 다음과 같이 페이지 제목과 작성자를 데이터에 넣는다.
+```javascript
+module.exports = {
+  siteMetadata: {
+    title: "JSnow's dev blog",
+    author: "Snow Jang",
+  },
+  // in gatsby-config.js
+  plugins: [`gatsby-plugin-sass`],
+}
+```
+
+graphql에서 데이터를 확인하려면 [GraphiQL](http://localhost:8000/__graphql)을 이용한다.
+
+여기서 왼쪽을 보면 쿼리를 넣을 수 있는데 왼편에 쿼리를 넣고 재생 버튼을 누르면 왼쪽에 결과를 볼 수 있다.
+
+![image-20190619204630313](README/image-20190619204630313-0944790.png)
+
+오른쪽 패널 끝의 Docs를 누르면 다음과 같이 볼 수 있는데 
+
+![image-20190619205548500](README/image-20190619205548500-0945348.png)
+
+Graphql에는 **query**, **mutation**, **subscribtion** 3가지 주요한 operation이 있다. 우리는 그 중에 query를 주로 이용할 예정이다. 
+
+`Query` > `Site` > `siteMetadata` 의 경로로 타고 들어가면 우리가 넣은 `title`과 `author` 데이터로 접근할 수 있다.
+
+![image-20190619210603502](README/image-20190619210603502-0945963.png)
+
+접근 경로를 알았으니 실제로 접근해서 동일한 결과가 나오는지 확인하면 다음과 같다.
+
+```javascript
+query {
+  site {
+    siteMetadata {
+      title
+    }
+  }
+}
+```
+
+![image-20190619212401106](README/image-20190619212401106-0947041.png)
+
+이제 이를 활용하여 웹 페이지의 Title을 반영하려면 다음과 같이 작성하면 된다.
+
+```javascript
+import React from "react"
+import { Link, graphql, useStaticQuery } from "gatsby"
+
+import headerStyles from "./header.module.scss"
+
+const Header = () => {
+  const data = useStaticQuery(graphql`
+    query {
+      site {
+        siteMetadata {
+          title
+        }
+      }
+    }
+  `)
+
+  return (
+    <header className={headerStyles.header}>
+      <h1>
+        <Link className={headerStyles.title} to="/">
+          {data.site.siteMetadata.title}
+        </Link>
+      </h1>
+```
+graphql을 제대로 이용하기 위해서는 `graphql`과 `useStaticQuery` 모듈을 import 해서 쓴다.
+그리고 `data` 변수에 useStaticQuery()메서드와 graphql메서드를 이용하는데 이용 방식이 좀 특이하다 앞에서 썼던 쿼리를 template string의 형식인 Backtick 사이에 넣어서 이용한다. 결과가 올바르게 반영 되었다.
+
+![image-20190619212934835](README/image-20190619212934835-0947374.png)
