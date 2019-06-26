@@ -844,12 +844,13 @@ plugins: [
 이제 실제 graphql로 잡아서 어떤 데이터를 불러 올 수 있는지 보면 다음과 같다.
 
 ```javascript
+
 query{
   allMarkdownRemark{
     edges{
       node{
         frontmatter{
-          title,
+          title
           date
         }
       }
@@ -895,10 +896,10 @@ query{
     edges{
       node{
         frontmatter{
-          title,
+          title
           date
-        },
-        html,
+        }
+        html
         excerpt
       }
     }
@@ -1001,5 +1002,145 @@ export default BlogPage
 
 ```bash
 Warning: Each child in a list should have a unique "key" prop.
+```
+
+---
+
+이제 블로그 post를 선택하면 페이지가 동적으로 자동 생성되게 만들어 주고 싶다. 다시 말해, 데이터를 정형화된 양식에 맞춰 생성하게 만들고 싶다.
+
+root폴더에 `gatsby-node.js`를 생성한다. 
+
+그런 다음 gatsby의 DOCS 페이지에서 API REFERENCE의 [Gatsby Node APIs](https://www.gatsbyjs.org/docs/node-apis/) 에서 필요한 api를 찾아본다.![image-20190626172354554](README/image-20190626172354554-1537434.png) 
+
+`onCreateNode` 를 사용할 것이다. 여기서 node는 query에서 보았던 node다. 각 post를 뜻한다고 보면 쉽다.
+
+![image-20190626172615528](README/image-20190626172615528-1537575.png)
+
+![image-20190626172630084](README/image-20190626172630084-1537590.png)
+
+아까 생성한 `gatsby-node.js`에 다음과 같이 작성한다. 일단, `createNode`는 아직 사용하지 않는다. 먼저 확인을 위해 콘솔로 한 번 찍어본다. 이를 위해 서버를 다시 시작한다. 
+
+```javascript
+module.exports.onCreateNode = ({ node, actions }) => {
+  const { createNodeField } = actions
+  console.log(JSON.stringfy(node, undefined, 4))
+}
+```
+
+![image-20190626174138069](README/image-20190626174138069-1538498.png)
+
+여기서 우리는 `internal` > `type` 에 집중하며 다시 다음과 같이 고친 이후 출력한다.
+
+```javascript
+module.exports.onCreateNode = ({ node, actions }) => {
+  const { createNodeField } = actions
+  if (node.internal.type === "MarkdownRemark") {
+    console.log(JSON.stringify(node, undefined, 4))
+  }
+}
+```
+
+다음과 같이 나온다. 여기서 중요한 것은 현재 나와있는 `fileAbsolutePath`를 변경할 것이라는 점이다.
+
+```javascript
+{
+    "id": "809ad49b-0045-5668-a92a-556b2295bc3c",
+    "children": [],
+    "parent": "7b04ea0b-802c-504b-bfa7-fa3593bdf53c",
+    "internal": {
+        "content": "\nReact는 정말 좋은 Framework다!",
+        "type": "MarkdownRemark",
+        "contentDigest": "1bb5ac23b81d05f31949bb2d2594f198",
+        "owner": "gatsby-transformer-remark"
+    },
+    "frontmatter": {
+        "title": "React를 처음 접했을 때",
+        "date": "2019-04-02"
+    },
+    "excerpt": "",
+    "rawMarkdownBody": "\nReact는 정말 좋은 Framework다!",
+    "fileAbsolutePath":
+"/Users/soonho/project/gatsby-practice/src/posts/react.md"
+```
+
+그렇게 하기 위해서는 node에서 [path와 관련된 모듈](https://nodejs.org/dist/latest-v10.x/docs/api/path.html)을 가져와 사용한다. `basename` 을 사용한다.
+
+![image-20190626174635786](README/image-20190626174635786-1538796.png)
+
+다음과 같이 작성하고 확인하면 우리가 만든 포스트의 확장자를 제외한 이름이 출력된다.
+
+```javascript
+const path = require("path")
+
+module.exports.onCreateNode = ({ node, actions }) => {
+  const { createNodeField } = actions
+  if (node.internal.type === "MarkdownRemark") {
+    const slug = path.basename(node.fileAbsolutePath, ".md")
+    console.log("@@@@@@@@@@@", slug)
+  }
+}
+```
+
+![image-20190626175044490](README/image-20190626175044490-1539044.png)
+
+이제 이름을 분리하였고 이를 query에 넣어준다. 이를 위해서는 다음과 같이 작성한다.
+
+```javascript
+const path = require("path")
+
+module.exports.onCreateNode = ({ node, actions }) => {
+  const { createNodeField } = actions
+  if (node.internal.type === "MarkdownRemark") {
+    const slug = path.basename(node.fileAbsolutePath, ".md")
+    createNodeField({
+      node,
+      name: "slug",
+      value: slug,
+    })
+  }
+}
+```
+
+graphql playground를 들어가서 한 번 결과를 출력하면 다음과 같다.
+
+```javascript
+query{
+  allMarkdownRemark{
+    edges{
+      node{
+        frontmatter{
+          title
+          date
+        }
+        html
+        excerpt
+        fields{
+          slug
+        }
+      }
+    }
+  }
+}
+```
+
+```javascript
+{
+  "data": {
+    "allMarkdownRemark": {
+      "edges": [
+        {
+          "node": {
+            "frontmatter": {
+              "title": "React를 처음 접했을 때",
+              "date": "2019-04-02"
+            },
+            "html": "<p>React는 정말 좋은 Framework다!</p>",
+            "excerpt": "React는 정말 좋은 Framework다!",
+            "fields": {
+              "slug": "react"
+            }
+          }
+        },
+
 ```
 
