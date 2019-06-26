@@ -1144,3 +1144,91 @@ query{
 
 ```
 
+---
+
+이제, 블로그 포스트의 템플릿을 한 번 만들어 보려한다.
+
+우선 `src/templates` 폴더를 만들고 `blog.js`를 생성한다.
+
+```javascript
+import React from "react"
+
+import Layout from "../components/layout"
+
+const Blog = () => {
+  return <Layout>This is post that i created!</Layout>
+}
+
+export default Blog
+```
+
+[createPages](https://www.gatsbyjs.org/docs/node-apis/#createPages)라는 페이지를 생성하는 gasby api가 있다. 이를 이용하기 위해서는 `gastby-node.js` 에 다음과 같이 코드를 추가한다.
+
+```javascript
+exports.createPages = ({ graphql, actions }) => {
+  const { createPage } = actions
+  const blogTemplate = path.resolve("./src/templates/blog.js")
+}
+```
+
+이제 우리는 필요한 데이터를 가져오는데 우리에게 필요한 정보는 `slug` 뿐이기 때문에, query를 추가하여 가져온다. 이때 `graphql`은 앞에서 우리가 쓰던 `graphql` 모듈과 달리 그 자체가 메서드 이기 때문에 메서드의 방식으로 query를 추가하여 사용한다.
+
+```javascript
+exports.createPages = ({ graphql, actions }) => {
+  const { createPage } = actions
+  const blogTemplate = path.resolve("./src/templates/blog.js")
+  graphql(`
+    query {
+      allMarkdownRemark {
+        edges {
+          node {
+            fields {
+              slug
+            }
+          }
+        }
+      }
+    }
+  `)
+}
+```
+
+여기서 `graphql`메서드는 `return` 값으로 `Promise`객체를 반환한다. `async`와 `await`를 통해 비동기 처리를 해줘야한다. createPage를 통해 각각 필요한 인자를 넘겨준다.
+
+```javascript
+exports.createPages = async ({ graphql, actions }) => {
+  const { createPage } = actions
+  const blogTemplate = path.resolve("./src/templates/blog.js")
+  const res = await graphql(`
+    query {
+      allMarkdownRemark {
+        edges {
+          node {
+            fields {
+              slug
+            }
+          }
+        }
+      }
+    }
+  `)
+
+  res.data.allMarkdownRemark.edges.forEach(edge => {
+    createPage({
+      component: blogTemplate,
+      path: `/blog/${edge.node.fields.slug}`,
+      context: {
+        slug: edge.node.fields.slug,
+      },
+    })
+  })
+}
+```
+
+다시 서버를 껐다 키면 생성된 페이지에 접근할 수 있는데, 아직은 링크를 이어주지 않았기 때문에, 직접 페이지를 접근해야한다. slug에 따라 `localhost:8000/blog/react`와 `localhost:8000/blog/gatsby` 접속해보면 올바르게 접근할 수 있음을 확인할 수 있다.
+
+![image-20190626213636421](README/image-20190626213636421-1552596.png)
+
+만약에 없는 페이지에 접근해보면 만들어진 생성된 페이지를 확인할 수 있다.
+
+![image-20190626213720635](README/image-20190626213720635-1552640.png)
