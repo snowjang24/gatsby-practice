@@ -809,3 +809,197 @@ query{
   }
 }
 ```
+마크다운을 변환시켜 주기 위해서 새로운 플러그인을 설치한다. 역시나 마찬가지로 플러그인 검색 페이지에서 **REMARK**를 검색하여 [gatsby-transformer-remark](https://www.gatsbyjs.org/packages/gatsby-transformer-remark/?=remark)를 설치한다.
+여기서 remark는 markdown파일을 파싱해주는 javascript library다.
+
+그리고 `gatsby-config.js`의 `plugins`를 다음과 같이 수정한다.
+
+```javascript
+plugins: [
+    `gatsby-plugin-sass`,
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "src",
+        path: `${__dirname}/src/`,
+      },
+    },
+    `gatsby-transformer-remark`,
+  ],
+```
+
+다시 graphql playground에 접속하면 다음과 같이 두개의 새로운 항목이 생긴것을 확인할 수 있다.
+
+![image-20190625164804981](README/image-20190625164804981-1448885.png)
+
+* `markdownRemark`는 개별적인 post를 fetch한다. 
+* `allMarkdownRemark`는 post목록을 fetch한다.
+
+우리는 `allMarkdownRemark`를 활용하여 블로그 리스트를 만드는 페이지를 완성하려 한다.
+
+`allMarkdownRemark` > `edges` > `node` > `frontmatter`를 타고 들어가서 살펴보면 다음과 같이 `title`과`date`를 볼 수 있다.
+
+![image-20190625171634164](README/image-20190625171634164-1450594.png)
+
+이제 실제 graphql로 잡아서 어떤 데이터를 불러 올 수 있는지 보면 다음과 같다.
+
+```javascript
+query{
+  allMarkdownRemark{
+    edges{
+      node{
+        frontmatter{
+          title,
+          date
+        }
+      }
+    }
+  }
+}
+```
+
+결과를 보면 아까 작성 했던 post들의 titl과 date를 확인할 수 있다.
+
+```javascript
+{
+  "data": {
+    "allMarkdownRemark": {
+      "edges": [
+        {
+          "node": {
+            "frontmatter": {
+              "title": "Gatsby를 사용하는 방법",
+              "date": "2019-04-04"
+            }
+          }
+        },
+        {
+          "node": {
+            "frontmatter": {
+              "title": "React를 처음 접했을 때",
+              "date": "2019-04-02"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+frontmatter외에 html과 excerpt를 추가하면 다음과 같은 결과를 얻을 수 있다.
+
+```javascript
+query{
+  allMarkdownRemark{
+    edges{
+      node{
+        frontmatter{
+          title,
+          date
+        },
+        html,
+        excerpt
+      }
+    }
+  }
+}
+```
+
+```javascript
+"data": {
+    "allMarkdownRemark": {
+      "edges": [
+        {
+          "node": {
+            "frontmatter": {
+              "title": "Gatsby를 사용하는 방법",
+              "date": "2019-04-04"
+            },
+            "html": "<p>Gatsby를 이용하여 블로그를 만들기 위해서는 다음과 같은 사전지식이 필요하다.</p>\n<h2>블로그를 만들기 위해 알아야 할 것들</h2>\n<ol>\n<li>Gatsby &#x26; Netlify</li>\n<li>React</li>\n<li>GraphQL</li>\n</ol>",
+            "excerpt": "Gatsby를 이용하여 블로그를 만들기 위해서는 다음과 같은 사전지식이 필요하다.블로그를 만들기 위해 알아야 할 것들Gatsby & NetlifyReactGraphQL"
+          }
+        },
+```
+
+이제 이 글의 제목과 시간을 실제 블로그 페이지에 불러오려면 다음과 같이 `blog.js`에 작성하면 된다.
+
+```javascript
+import React from "react"
+import { graphql, useStaticQuery } from "gatsby"
+
+import Layout from "../components/layout"
+
+const BlogPage = () => {
+  const data = useStaticQuery(graphql`
+    query {
+      allMarkdownRemark {
+        edges {
+          node {
+            frontmatter {
+              title
+              date
+            }
+          }
+        }
+      }
+    }
+  `)
+
+  console.log(data)
+```
+
+다음과 같이 불러올 수 있음을 확인할 수 있다.
+
+![image-20190626154756674](README/image-20190626154756674-1531676.png)
+
+이제 뿌려주는 일만 남았다. 각각의 글 목록은 `<ol>`을 통해 뿌려진다. 이를 위해 `map`을 이용한다.
+
+```javascript
+import React from "react"
+import { graphql, useStaticQuery } from "gatsby"
+
+import Layout from "../components/layout"
+
+const BlogPage = () => {
+  const data = useStaticQuery(graphql`
+    query {
+      allMarkdownRemark {
+        edges {
+          node {
+            frontmatter {
+              title
+              date
+            }
+          }
+        }
+      }
+    }
+  `)
+  return (
+    <Layout>
+      <h1>Blog</h1>
+      <ol>
+        {data.allMarkdownRemark.edges.map(edge => {
+          return (
+            <li>
+              <h2>{edge.node.frontmatter.title}</h2>
+              <p>{edge.node.frontmatter.date}</p>
+            </li>
+          )
+        })}
+      </ol>
+    </Layout>
+  )
+}
+
+export default BlogPage
+
+```
+
+리스트에 대한 오류는 일단 무시하고 넘어간다.
+
+```bash
+Warning: Each child in a list should have a unique "key" prop.
+```
+
