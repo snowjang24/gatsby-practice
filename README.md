@@ -1232,3 +1232,191 @@ exports.createPages = async ({ graphql, actions }) => {
 만약에 없는 페이지에 접근해보면 만들어진 생성된 페이지를 확인할 수 있다.
 
 ![image-20190626213720635](README/image-20190626213720635-1552640.png)
+
+이제 접근 링크를 이어준다. `./src/pages/blog.js` 에서 `gatsby`의 `Link` 모듈을 가져온다
+
+```javascript
+import React from "react"
+import { Link, graphql, useStaticQuery } from "gatsby"
+
+```
+
+그리고 페이지를 이어주기 위해 필요한 데이터인 `slug`를 쿼리에 추가한다.
+
+```javascript
+const data = useStaticQuery(graphql`
+    query {
+      allMarkdownRemark {
+        edges {
+          node {
+            frontmatter {
+              title
+              date
+            }
+            fields {
+              slug
+            }
+          }
+        }
+      }
+    }
+  `)
+```
+
+그런 다음 `Link`모듈을 이용하여 링크를 생성한다. 아까 생성한 페이지를 링크를 클릭하여 접근할 수 있게 되었다.
+
+```javascript
+ return (
+    <Layout>
+      <h1>Blog</h1>
+      <ol>
+        {data.allMarkdownRemark.edges.map(edge => {
+          return (
+            <li>
+              <Link to={`/blog/${edge.node.fields.slug}`}>
+                <h2>{edge.node.frontmatter.title}</h2>
+                <p>{edge.node.frontmatter.date}</p>
+              </Link>
+            </li>
+          )
+        })}
+      </ol>
+    </Layout>
+  )
+```
+
+---
+
+이제 페이지를 클릭하면 각각에 맞는 데이터를 가져올 수 있게끔 만드려고 한다. 
+
+다시 playground로 가서 우리가 필요한 데이터를 한 번 확인해보면 다음과 같다. `slug`에  `eq`를 지정하여 가져오려고 한다. (조건부 탐색처럼)
+
+![image-20190626215510552](README/image-20190626215510552-1553710.png)
+
+우리가 앞에서 데이터를 가져올 때 다음과 같이 가져왔었다.
+
+```javascript
+query{
+  markdownRemark{
+    frontmatter{
+      title
+    }
+  }
+}
+```
+
+여기에 조건을 주기 위해 graphql에서는 인자를 넣어 조건을 기준으로 탐색하게 할 수 있다.
+
+`markdownRemark`에 인자를 넣어 조건에 맞는 데이터를 가져오면 다음과 같다.
+
+```javascript
+query{
+  markdownRemark (
+    fields:{
+      slug:{
+        eq: "react"
+      }
+    }
+  ){
+    frontmatter{
+      title
+    }
+  }
+}
+```
+
+```javascript
+{
+  "data": {
+    "markdownRemark": {
+      "frontmatter": {
+        "title": "React를 처음 접했을 때"
+      }
+    }
+  }
+}
+```
+
+하지만 이걸 실제로 쓰기위해서는 **query variables** 를 이용하여 동적으로 값을 줄 수 있게 만들어야 한다. 화면 아래의 QUERY VARIABLES를 클릭하면 콘솔창 하나가 나오는데 여기에 값을 넣어 주고 query 자체에 인자를 받을 수 있게 바꿔준다. 아까와 같이 react에 대한 결과가 출력된다. 만약 여기서 `"slug":"react"`를 `"gatsby"`로 변경하면 이에 맞는 결과가 출력된다.
+
+```javascript
+query(
+  $slug: String!
+){
+  markdownRemark (
+    fields:{
+      slug:{
+        eq: $slug
+      }
+    }
+  ){
+    frontmatter{
+      title
+    }
+  }
+}
+```
+
+```javascript
+{
+  "slug" : "react"
+}
+```
+
+![image-20190626220837212](README/image-20190626220837212-1554517.png)
+
+이제 이 query를 직접 사용해보자. 여기서 앞에서와 같이 `useStaticQuery`를 이용한 방법으로는 쿼리를 불러올 수 없다. 동적으로 데이터를 할당할 경우, 아래와 같이 사용해야 한다. query를 export하고, 이를 불러와서 사용해야 한다.
+
+```javascript
+import React from "react"
+import { graphql } from "gatsby"
+
+import Layout from "../components/layout"
+
+export const query = graphql`
+  query($slug: String!) {
+    markdownRemark(fields: { slug: { eq: $slug } }) {
+      frontmatter {
+        title
+        date
+      }
+      html
+    }
+  }
+`
+
+const Blog = props => {
+  return (
+    <Layout>
+      <h1>{props.data.markdownRemark.frontmatter.title}</h1>
+      <p>{props.data.markdownRemark.frontmatter.date}</p>
+    </Layout>
+  )
+}
+
+export default Blog
+
+```
+
+이제 여기에 내용에 해당하는 부분을 불러오는데, 이때는 react의 `dangerouslySetInnerHTML`를 이용한다.
+
+![image-20190626222717950](README/image-20190626222717950-1555638.png)
+
+```javascript
+const Blog = props => {
+  return (
+    <Layout>
+      <h1>{props.data.markdownRemark.frontmatter.title}</h1>
+      <p>{props.data.markdownRemark.frontmatter.date}</p>
+      <div
+        dangerouslySetInnerHTML={{ __html: props.data.markdownRemark.html }}
+      ></div>
+    </Layout>
+  )
+}
+```
+
+올바르게 데이터를 가져와서 뿌려주고 있다.
+
+![image-20190626222818800](README/image-20190626222818800-1555698.png)
+
