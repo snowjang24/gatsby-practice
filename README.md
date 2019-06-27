@@ -1482,5 +1482,97 @@ module.exports = {
 
 필요하다면, `src/posts/gatsby`를 생성하여 `gatsby.md`와 `gatsby-image.jpg` 를 옮겨서 이미지와  마크다운문서를 함께 관리할 수 있다.
 
+추가로 `footer`가 너무 붙어 있고 스타일이 없어 마치 글의 연장선으로 보인다. 이를 위해, `footer`에 스타일을 추가한다. `footer.module.scss` 를 만들고 다음과 같은 스타일을 추가한다.
+
+```css
+.footer {
+  margin-top: 3rem;
+}
+```
+
+`footer` 에 이를 이어준다.
+
+```javascript
+import footerStyles from "./footer.module.scss"
+...
+  return (
+    <footer className={footerStyles.footer}>
+      <p>Created by {data.site.siteMetadata.author}, © 2019</p>
+    </footer>
+  )
+```
+
+그리고 블로그 글 목록을 좀 더 꾸며보자
+
+`src/pages`에 `blog.module.scss`를 생성한다.
+
+```css
+.posts {
+  list-style-type: none;
+  margin: 0;
+}
+```
+
+```javascript
+import blogStyles from "./blog.module.scss"
+...
+ return (
+    <Layout>
+      <h1>Blog</h1>
+      <ol className={blogStyles.posts}>
+```
+
+이제 `<li>`와 `<h2>`, `<p>`에 스타일을 주려 하는데, 이렇게 하나하나 적용하는 방식은 번거롭다.
+
+한꺼번에 적용하고 싶다. 먼저 `<li>`에 우리가 했던 방식대로 스타일을 적용하면 다음과 같다.
+
+```css
+.post {
+  margin: 1rem 0;
+}
+```
+
+```javascript
+return (
+  <li className={blogStyles.post}>
+    <Link to={`/blog/${edge.node.fields.slug}`}>
+      <h2>{edge.node.frontmatter.title}</h2>
+      <p>{edge.node.frontmatter.date}</p>
+    </Link>
+  </li>
+)
+```
+
+scss를 활용하는 방법이다.
+
+```scss
+.post {
+  margin: 1rem 0;
+  a {
+    background: #f4f4f4;
+    color: #000;
+    display: block;
+    padding: 1rem;
+    text-decoration: none;
+  }
+  a:hover {
+    background: #e4e4e4;
+  }
+  h2 {
+    margin-bottom: 0;
+  }
+  p {
+    color: #777777;
+    font-size: 0.8rem;
+    font-style: italic;
+  }
+}
+
+```
+
+
+
+
+
 ---
 
