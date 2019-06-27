@@ -1567,12 +1567,63 @@ scss를 활용하는 방법이다.
     font-style: italic;
   }
 }
+```
+---
 
+## 날짜 포맷 변환
+
+날짜 포맷 변환은 어렵지 않다. `src/pages/blog.js`에서 앞서 사용했던 쿼리를 조금 수정하면 된다.
+
+우선 playground에서 확인하자 원래의 쿼리대로 타고가다 보면 `date`를 만나는데 이 `date` 안에는 `formatString` 이라는 매개변수에 값을 할당하여 날짜 형식을 변경할 수 있다.
+
+![image-20190627194719743](README/image-20190627194719743-1632439.png)
+
+다양한 날짜 형식이 있는데 [momentjs](https://momentjs.com/)를 참고하여 원하는 날짜 형식을 선택하면 된다.
+
+```javascript
+query {
+      allMarkdownRemark {
+        edges {
+          node {
+            frontmatter {
+              title
+              date(formatString: "MMMM Do, YYYY")
+            }
+            fields {
+              slug
+            }
+          }
+        }
+      }
+    }
 ```
 
+추가로 sort기능도 추가 가능하다. 글의 경우 최신 글이 맨 위로 있기 때문에 그에 맞게 변경해야한다.
 
+![image-20190627194848563](README/image-20190627194848563-1632528.png)
 
+`frontmatter`내부에 있는 `date`를 기준으로 하기 때문에 다음과 같이 작성하여 이용한다.
 
-
----
+```javascript
+query {
+      allMarkdownRemark (
+        sort:{
+          fields: frontmatter___date
+          order:DESC
+        }
+      ){
+        edges {
+          node {
+            frontmatter {
+              title
+              date(formatString: "MMMM Do, YYYY")
+            }
+            fields {
+              slug
+            }
+          }
+        }
+      }
+    }
+```
 
