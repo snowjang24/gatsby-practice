@@ -1008,7 +1008,7 @@ Warning: Each child in a list should have a unique "key" prop.
 
 이제 블로그 post를 선택하면 페이지가 동적으로 자동 생성되게 만들어 주고 싶다. 다시 말해, 데이터를 정형화된 양식에 맞춰 생성하게 만들고 싶다.
 
-root폴더에 `gatsby-node.js`를 생성한다. 
+root폴더에 `gatsby-node.js`를  생성한다. 
 
 그런 다음 gatsby의 DOCS 페이지에서 API REFERENCE의 [Gatsby Node APIs](https://www.gatsbyjs.org/docs/node-apis/) 에서 필요한 api를 찾아본다.![image-20190626172354554](README/image-20190626172354554-1537434.png) 
 
@@ -1419,4 +1419,68 @@ const Blog = props => {
 올바르게 데이터를 가져와서 뿌려주고 있다.
 
 ![image-20190626222818800](README/image-20190626222818800-1555698.png)
+
+---
+
+## Post에 이미지 더하기
+
+3가지 플러그인을 설치하여 쉽게 처리할 수 있다.
+
+아무 이미지나 `src/posts`에 넣는다. 그리고 `gatsby.md`에 다음과 같이 Markdown에 맞는 이미지 경로를 설정하여 하나 만든다.
+
+```markdown
+![Gatsby](./gatsby-image.jpg)
+```
+
+이제 다시 서버를 끄고 플러그인들을 설치한다
+
+```bash
+npm install gatsby-plugin-sharp gatsby-remark-images gatsby-remark-relative-images
+```
+
+그리고 `gastby-config.js`를 다음과 같이 수정한다.
+
+```javascript
+module.exports = {
+  siteMetadata: {
+    title: "JSnow's dev blog",
+    author: "Snow Jang",
+  },
+  // in gatsby-config.js
+  plugins: [
+    "gatsby-plugin-sass",
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "src",
+        path: `${__dirname}/src/`,
+      },
+    },
+    "gatsby-plugin-sharp",
+    {
+      resolve: "gatsby-transformer-remark",
+      options: {
+        plugins: [
+          "gastby-remark-relative-images",
+          {
+            resolve: "gastby-remark-images",
+            opsions: {
+              maxWidth: 750,
+              linkImagesToOriginal: false,
+            },
+          },
+        ],
+      },
+    },
+  ],
+}
+```
+
+다시 실행하면 이미지가 잘 들어가는 것을 확인할 수 있다.
+
+![image-20190627190255362](README/image-20190627190255362-1629775.png)
+
+필요하다면, `src/posts/gatsby`를 생성하여 `gatsby.md`와 `gatsby-image.jpg` 를 옮겨서 이미지와  마크다운문서를 함께 관리할 수 있다.
+
+---
 
