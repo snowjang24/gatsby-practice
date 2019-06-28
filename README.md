@@ -1709,3 +1709,20 @@ export default IndexPage
 올바르게 This is a test를 출력하고 있다. 여기서 favicon을 바꿔주고 싶다면, 루트 폴더의 `static/favicon.ico`를 수정하면 된다.
 
 ![image-20190627202114904](README/image-20190627202114904-1634475.png)
+
+---
+
+## 
+
+## Gatsby로 만든 페이지 배포하기
+
+`.env.development`는 키값같은 다양한 데이터를 담고 있다. 여기서는 CONTENTFUL이란 라이브러리의 키값을 가지고 있지만 실제 연습에서는 사용하지 않았다.
+
+![image-20190628110743433](README/image-20190628110743433-1687663.png)
+
+이 `.env.development`의 이름을 `.env`로 바꾼다. 그리고 `package.js` 에서 `scripts`부분도 수정한다.
+
+```javascript
+
+```
+
