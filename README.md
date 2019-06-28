@@ -1,53 +1,77 @@
-# Gatsby로 만드는 블로그
+# Gatsby와 React로 만드는 블로그
 > 강의 : https://www.youtube.com/watch?v=8t0vNu2fCCM
+>
+> 본 글은 상단의 "Andrew Mead"의 강의를 듣고, 정리를 위해 내용을 추가하여 작성한 글입니다.
 
-
-
+<br>
 
 <details>
   <summary>
     <strong>목차</strong>
   </summary>
   <p>
-    1. Creating a Gatsby Site
-    2. Working with Gatsby Pages
-    3. Linking Between Pages with Gatsby
-    4. Creating Shared Page Components
-    5. Creating Gatsby Page Layouts
-    6. Styling Gatsby Projects
-    7. Styling Gatsby with CSS Modules
-    8. Gatsby Data with GraphQL
-    9. GraphQL Playground
-    10. Sourcing Content from the File System
-    11. Working with Markdown Posts
-    12. Generating Slugs for Posts
-    13. Dynamically Generating Pages
-    14. Rendering Post Data in Blog Template
-    15. Adding Images to Posts
-    16. Getting Started with Contentful
-    17. Rendering Contentful Posts
-    18. Dynamic Pages from Contentful
-    19. 404 Pages and React Helme
-    20. Deploying Your Gatsby Site
+    1. Creating a Gatsby Site<br>
+    2. Working with Gatsby Pages<br>
+    3. Linking Between Pages with Gatsby<br>
+    4. Creating Shared Page Components<br>
+    5. Creating Gatsby Page Layouts<br>
+    6. Styling Gatsby Projects<br>
+    7. Styling Gatsby with CSS Modules<br>
+    8. Gatsby Data with GraphQL<br>
+    9. GraphQL Playground<br>
+    10. Sourcing Content from the File System<br>
+    11. Working with Markdown Posts<br>
+    12. Generating Slugs for Posts<br>
+    13. Dynamically Generating Pages<br>
+    14. Rendering Post Data in Blog Template<br>
+    15. Adding Images to Posts<br>
+    16. Getting Started with Contentful<br>
+    17. Rendering Contentful Posts<br>
+    18. Dynamic Pages from Contentful<br>
+    19. 404 Pages and React Helme<br>
+    20. Deploying Your Gatsby Site<br>
   </p>
 </details>
 
+## 📌 Gatsby와 블로그
+
+### 나의 블로그 연대기
+
+처음 블로그는 [jekyll](https://jekyllrb-ko.github.io/)을 사용하여 블로그를 만들었다. 그러다 얼마 지나지 않아 [HEXO](https://hexo.io/ko/index.html)와 [VEXO](https://github.com/yanm1ng/hexo-theme-vexo)테마로 넘어가게 되었는데, 한창 Node와 Vue를 공부할 때였다. 
+
+이번에 [Gatsby](https://www.gatsbyjs.org/)로 넘어오게 된 이유도 이전과 같다. React를 공부하다 보니 React를 사용하여 나만의 블로그를 만들어보고 싶어졌다. 이전에 테마를 조금 수정하여 블로그를 만이번에는 테마를 최소화하여 진짜 **"나만의 블로그"**를 만들어 보려 한다.
+
+<br>
+
+### Gatsby에 대하여
+
+ [**Gatsby**](https://www.gatsbyjs.org/)는 **React**와 **GraphQL**을 이용하여 웹 사이트와 웹 앱을 만들기 쉽게 제작할 수 있는 **프레임워크**다. Gatsby는 우리가 아는 정적인 웹을 만들수 있을 뿐만 아니라 동적인 웹 앱을 만드는데 모두 쓰인다.
+
+Gatsby를 이용하여 웹을 생성할 때는 React와 GraphQL이 주를 이루기 때문에, 이 둘에 대한 지식이 어느 정도 있어야 원하는 방향으로 웹을 제작할 수 있다. 하지만 현재 블로그 만들기에서는 아직 GraphQL에 대해 깊게 다루지 않기 때문에 어느 정도의 React지식만 있어도 충분히 원하는 대로 블로그를 만들 수 있다.
+
+<img src="README/34442516-fb1a1a3c-ecc2-11e7-8fe8-530435f22336.jpg" width="60%">
+
+<br>
+
+## <a name="number1">✏️ 1. Gatsby로 블로그 만들기</a>
+
+Gatsby를 설치하기 위한 명령어는 다음과 같다. **gatsby-cli**를 설치하고, gatsby 명령어를 통해 원하는 블로그(혹은 프로젝트) 이름으로 프로젝트를 생성한다. 이 때 [gastby-starter](https://github.com/gatsbyjs/gatsby-starter-hello-world)를 이용하면 좀 더 쉽게 기본적인 세팅을 한다.
 
 ```bash
 npm install -g gatsby-cli
 gatsby new gatsby-practice https://github.com/gatsbyjs/gatsby-starter-hello-world
 ```
 
-`package.json`에 접근해보면 다음과 같은 명령어들이 존재함을 확인할 수 있다.
+여러 파일들과 폴더가 생겼다. 여기서 `package.json`을 열어보면 다음과 같은 명령어들이 존재하는 것을 확인할 수 있다.
 
 ```json
 "scripts": {
-"build": "gatsby build",
-"develop": "gatsby develop",
-"format": "prettier --write src/**/*.{js,jsx}",
-"start": "npm run develop",
-"serve": "gatsby serve",
-"test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\""
+  "build": "gatsby build",
+  "develop": "gatsby develop",
+  "format": "prettier --write src/**/*.{js,jsx}",
+  "start": "npm run develop",
+  "serve": "gatsby serve",
+  "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\""
 }
 ```
 
@@ -56,6 +80,20 @@ gatsby new gatsby-practice https://github.com/gatsbyjs/gatsby-starter-hello-worl
 ```bash
 npm run develop
 ```
+
+ 사실 `npm run develop`과 `gatsby develop`은 동일한 
+
+```bash
+npm run develop
+
+> gatsby-starter-hello-world@0.1.0 develop /Users/soonho/project/jsnow-blog
+> gatsby develop
+
+success open and validate gatsby-configs - 0.005 s
+success load plugins - 0.035 s
+```
+
+
 
 localhost를 실행해보면 Hello world라는 문구를 확인할 수 있다.
 
