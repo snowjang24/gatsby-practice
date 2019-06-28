@@ -1627,3 +1627,85 @@ query {
     }
 ```
 
+---
+
+## 404 Page와 React Helmet
+
+`src/pages`에 `404.js`를 생성한다.
+
+```javascript
+import React from "react"
+import { Link } from "gatsby"
+
+import Layout from "../components/layout"
+
+const NotFound = () => {
+  return (
+    <Layout>
+      <h1>Page not found</h1>
+      <p>
+        <Link to="/">Head home</Link>
+      </p>
+    </Layout>
+  )
+}
+
+export default NotFound
+```
+
+서버를 다시 실행하고 아무 틀린 주소를 입력하면 다음과 같이 나오는데, 이 페이지는 실제 프로덕트 페이지에서는 보이지 않는다. 직접 만든 404 page는 `Preview custom 404 page`를 클릭하여 확인가능하다. 
+
+![image-20190627200708684](README/image-20190627200708684-1633628.png)
+
+이제 [React Helmet](https://github.com/nfl/react-helmet)을 사용해보려 한다. 이와 같이 [gatsby-plugin-react-helmet](https://www.gatsbyjs.org/packages/gatsby-plugin-react-helmet/)을 이용하면 쉽게 쓸 수 있다.
+
+```bash
+npm install gatsby-plugin-react-helmet react-helmet
+```
+
+`gatsby-config.js` 도 수정한다.
+
+```javascript
+// in gatsby-config.js
+  plugins: [
+    "gatsby-plugin-react-helmet",
+```
+
+모든 파일에 head를 만들어 줄 수도 있지만 그것보다는 페이지마다 동적으로 할당하는 것이 더 좋다. 따라서 `src/components`에 `head.js`를 생성한다. 테스트를 위해 간단하게 작성하였다.
+
+```javascript
+import React from "react"
+import { Helmet } from "react-helmet"
+
+const Head = () => {
+  return <Helmet title="This is a test" />
+}
+export default Head
+```
+
+테스트를 위해 `src/pages/index.js`를 수정한다. 
+
+```javascript
+import React from "react"
+
+import Layout from "../components/layout"
+import Head from "../components/head"
+
+const IndexPage = () => {
+  return (
+    <div>
+      <Layout>
+        <Head />
+        <h1>Hello.</h1>
+        <h2>I'm JSnow! Front-end developer, I'm learning React!</h2>
+      </Layout>
+    </div>
+  )
+}
+
+export default IndexPage
+```
+
+올바르게 This is a test를 출력하고 있다. 여기서 favicon을 바꿔주고 싶다면, 루트 폴더의 `static/favicon.ico`를 수정하면 된다.
+
+![image-20190627202114904](README/image-20190627202114904-1634475.png)

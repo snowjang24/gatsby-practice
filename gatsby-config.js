@@ -5,6 +5,7 @@ module.exports = {
   },
   // in gatsby-config.js
   plugins: [
+    "gatsby-plugin-react-helmet",
     "gatsby-plugin-sass",
     {
       resolve: "gatsby-source-filesystem",
