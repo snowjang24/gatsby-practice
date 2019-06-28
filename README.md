@@ -1,6 +1,38 @@
 # Gatsby로 만드는 블로그
 > 강의 : https://www.youtube.com/watch?v=8t0vNu2fCCM
 
+
+
+
+<details>
+  <summary>
+    <strong>목차</strong>
+  </summary>
+  <p>
+    1. Creating a Gatsby Site
+    2. Working with Gatsby Pages
+    3. Linking Between Pages with Gatsby
+    4. Creating Shared Page Components
+    5. Creating Gatsby Page Layouts
+    6. Styling Gatsby Projects
+    7. Styling Gatsby with CSS Modules
+    8. Gatsby Data with GraphQL
+    9. GraphQL Playground
+    10. Sourcing Content from the File System
+    11. Working with Markdown Posts
+    12. Generating Slugs for Posts
+    13. Dynamically Generating Pages
+    14. Rendering Post Data in Blog Template
+    15. Adding Images to Posts
+    16. Getting Started with Contentful
+    17. Rendering Contentful Posts
+    18. Dynamic Pages from Contentful
+    19. 404 Pages and React Helme
+    20. Deploying Your Gatsby Site
+  </p>
+</details>
+
+
 ```bash
 npm install -g gatsby-cli
 gatsby new gatsby-practice https://github.com/gatsbyjs/gatsby-starter-hello-world
@@ -1723,6 +1755,58 @@ export default IndexPage
 이 `.env.development`의 이름을 `.env`로 바꾼다. 그리고 `package.js` 에서 `scripts`부분도 수정한다.
 
 ```javascript
-
+"scripts": {
+    "build": "gatsby build",
+    "develop": "env-cmd -f .env gatsby develop",
+    "format": "prettier --write src/**/*.{js,jsx}",
 ```
 
+그리고 필요한 git repository를 만들어주고 모든 파일을 업로드 한다.
+
+![image-20190628111202362](README/image-20190628111202362-1687922.png)
+
+배포를 위해서는 [Netlify](https://www.netlify.com/)를 이용한다. 완전 무료다.
+
+![image-20190628111311320](README/image-20190628111311320-1687991.png)
+
+`New site from git`을 누른다.
+
+![image-20190628111401751](README/image-20190628111401751-1688042.png)
+
+원하는 git provider를 선택한다.
+
+![image-20190628111519952](README/image-20190628111519952-1688120.png)
+
+모든 레포를 가져올지 딱 하나의 레포를 가져올지 정할 수 있다. 아까 만들었던 레포를 가져와 배포할 예정이기 때문에 Only select repositories에서 필요한 레포를 선택한다.
+
+![image-20190628111650753](README/image-20190628111650753-1688211.png)
+
+그리고 Install 하면 된다.
+
+![image-20190628111712014](README/image-20190628111712014-1688232.png)
+
+선택한 레포를 다시 클릭하면 세팅페이지로 넘어간다.
+
+![image-20190628111801905](README/image-20190628111801905-1688282.png)
+
+그런다음 원하는 브랜치를 선택하여 배포할 수 있다. 필요하면 master말고 다른 브랜치를 두어 그 브랜치를 배포해도 된다. 다른 아래의 Basic build settings는 굳이 건드릴 필요가 없다.
+
+![image-20190628111847335](README/image-20190628111847335.png)
+
+아래에 보면 Show advanced 버튼이 있는데 눌러서 아래와 같이 Advanced build settings를 할 수 있다. 여기서 New variable을 누르면 아래와 같이 Key value를 입력할 수 있는 칸이 나오는데 아까 .env파일과 동일하게 역할한다. 만약 필요한 access key가 있다면 이를 활용하여 값을 넘겨줄 수 있다.
+
+![image-20190628112044094](README/image-20190628112044094-1688444.png)
+
+이제 디플로이중인 화면이 나오는데 시간이 조금 걸린다.
+
+![image-20190628112323201](README/image-20190628112323201-1688603.png)
+
+디플로이가 완료되면 페이지 주소가 나오는데 눌러서 접속하면 블로그가 디플로이 된 것을 확인할 수 있다.
+
+![image-20190628112419100](README/image-20190628112419100-1688659.png)
+
+만약 데이터를 수정하고 데이터를 사이트에 반영하고 싶다면 아래와 같이 Deploys탭에 가서 Trigger deploy를 눌러  Clear cache and deploy site를 눌러 디플로이 할 수 있다.
+
+![image-20190628112712261](README/image-20190628112712261-1688832.png)
+
+이보다는 우리가 잘 쓰는 로컬에서는 git에 수정사항을 다시 push 하면 자동으로 다시 Publish 된다.
