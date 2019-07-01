@@ -11,7 +11,7 @@
 
 처음 블로그는 [jekyll](https://jekyllrb-ko.github.io/)을 사용하여 블로그를 만들었다. 그러다 얼마 지나지 않아 [HEXO](https://hexo.io/ko/index.html)와 [VEXO](https://github.com/yanm1ng/hexo-theme-vexo)테마로 넘어가게 되었는데, 한창 Node와 Vue를 공부할 때였다. 
 
-이번에 [Gatsby](https://www.gatsbyjs.org/)로 넘어오게 된 이유도 이전과 같다. React를 공부하다 보니 React를 사용하여 나만의 블로그를 만들어보고 싶어졌다. 이전에 테마를 조금 수정하여 블로그를 만이번에는 테마를 최소화하여 진짜 **"나만의 블로그"**를 만들어 보려 한다.
+이번에 [Gatsby](https://www.gatsbyjs.org/)로 넘어오게 된 이유도 이전과 같다. React를 공부하다 보니 React를 사용하여 나만의 블로그를 만들어보고 싶어졌다. 이전에 테마를 조금 수정하여 블로그를 만이번에는 테마를 최소화하여 진짜 **"나만의 블로그"** 를 만들어 보려 한다.
 
 <br>
 
